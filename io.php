@@ -20,6 +20,23 @@ class IO
         	self::out('['.$mod[2].']['.date('m/d/Y h:i a').'] '.$text, $mod);
 	    }
 
+	static function confirm($question)
+	{
+	    $out = readline($question.' (Y/N)');
+
+	    if (strtoupper(trim($out)) === 'Y') {
+		return true;
+	    }
+
+	    return false;
+	}
+
+	static function abort()
+	{
+	    self::error('ABORT');
+	    exit;
+	}
+
         static function error($text)
         {
     	    self::log($text, self::ERROR);
