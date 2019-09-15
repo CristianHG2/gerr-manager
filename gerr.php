@@ -18,9 +18,17 @@ if ( count($argv) <= 2 ) {
 $config = file_get_contents('config.json');
 $config = json_decode($config);
 
-if (!is_array($config) || !isset($config->init)) {
+if (!is_object($config) || !isset($config->init)) {
     IO::log('Initializing GERR before continuing');
 	install();
+
+	if (!is_object($config)) {
+		$config = new \stdClass;
+	}
+
+	$config->init = true;
+
+	file_put_contents('config.json', json_encode($config));
 }
 
 /* Naming */
