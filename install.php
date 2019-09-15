@@ -75,4 +75,10 @@ function install()
             IO::abort();
         }
     }
+
+    if (!file_exists('/usr/bin/gerr')) {
+        if (IO::confirm('Make "gerr" executable globally available?')) {
+            exec('sudo ln -s '.__DIR__.'/gerr.php /usr/bin/gerr');
+        }
+    }
 }
