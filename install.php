@@ -70,6 +70,7 @@ function install()
             exec('sudo add-apt-repository \'deb [arch=amd64,arm64,ppc64el] http://mirrors.coreix.net/mariadb/repo/10.4/ubuntu bionic main\'');
             exec('sudo apt-get update');
             exec('sudo apt-get install mariadb-server');
+            IO::log('Please enter the username in config.json');
         } else {
             IO::abort();
         }

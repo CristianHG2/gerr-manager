@@ -4,6 +4,7 @@ require __DIR__.'/install.php';
 require __DIR__.'/colors.php';
 require __DIR__.'/io.php';
 require __DIR__.'/nginx.php';
+require __DIR__.'/db.php';
 
 /* Initialize GERR */
 
@@ -45,7 +46,20 @@ if ($command === 'project') {
 				$db = true;
 			}
 
-			Nginx::sites()->create($argv[3]);
+			$site = NginxSite::create($argv[3]);
+
+			if ($ssl) {
+				$site->ssl();
+			}
+
+			if ($laravel) {
+				$site->laravel();
+			}
+
+			if ($db) {
+				$basename = explode('.', $argv[3])[0];
+				Db::create($basename);
+			}
 		break;
 		case 'verify':
 			install();
