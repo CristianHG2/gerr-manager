@@ -1,0 +1,8 @@
+####UPSTREAMLOCBLOCK{id}START####
+location /{id} {
+    proxy_pass http://{id}Conn;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+}
+####UPSTREAMLOCBLOCK{id}END####

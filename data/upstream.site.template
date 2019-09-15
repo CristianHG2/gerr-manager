@@ -1,0 +1,5 @@
+####UPSTREAMBLOCK{id}START###
+upstream {id}Conn {
+   server {address};
+}
+####UPSTREAMBLOCK{id}END###
