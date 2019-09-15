@@ -24,11 +24,11 @@ class NginxSite
     public function __construct($domain)
     {
         if (strpos($domain, 'www.') !== false) {
-            IO:error('Do not include the www naming convention, GERR is not able to interact properly with this when setting up SSL');
+            IO::error('Do not include the www naming convention, GERR is not able to interact properly with this when setting up SSL');
         }
 
 	if (!file_exists(NGINX_ROOT.'/'.$domain.'.conf')) {
-	    IO:error("The $domain virtual site does not exist");
+	    IO::error("The $domain virtual site does not exist");
 	}
 
 	$this->paths = (object)[
@@ -43,14 +43,14 @@ class NginxSite
     {
 		$domain = $this->domain;
 		IO::log('Issuing SSL certificate');
-		exec('sudo certbot --nginx -d '.$domain.' -d www.'.$domain);
+		passthru('sudo certbot --nginx -d '.$domain.' -d www.'.$domain);
     }
 
     public function laravel()
     {
 		IO::log('Creating new laravel project');
-		exec('cd '.$this->paths->root);
-		exec('composer create-project --prefer-dist laravel/laravel .');
+		passthru('cd '.$this->paths->root);
+		passthru('composer create-project --prefer-dist laravel/laravel .');
     }
 
     public function fixPermissions()

@@ -44,10 +44,10 @@ class IO
 
         static function usage()
         {
-        	self::error('Not enough arguments, correct usage:'); echo PHP_EOL;
+        	self::error('Not enough arguments, correct usage:');
             self::error('gerr project new [domain] [--ssl][-S] [--laravel][-L] [--db][-D] - Creates new virtual site, and optionally, issues an SSL certificate, installs Laravel and/or creates a database');
-            self::error('gerr project full [domain] - Alias of the above command, but with all the options pre-enabled');
-        	self::error('gerr project ws [domain] [address] [?upstream] -- Creates a new websocket upstream on an existing Nginx virtual site, optional upstream naming, random string by default');
+            //self::error('gerr project full [domain] - Alias of the above command, but with all the options pre-enabled');
+        	//self::error('gerr project ws [domain] [address] [?upstream] -- Creates a new websocket upstream on an existing Nginx virtual site, optional upstream naming, random string by default');
             return;
         }
 

@@ -11,14 +11,14 @@ function install()
             exec('sudo add-apt-repository ppa:ondrej/php');
             exec('sudo apt-get update');
             exec('sudo apt-get install php7.3 php7.3-fpm phpcli phpmysql phpgd phpimagick phprecode phptidy phpxmlrpc');
+        }
+    } else {
+        if (IO::confirm('PHP 7.3 (FPM) NOT installed, install?')) {
+            exec('sudo add-apt-repository ppa:ondrej/php');
+            exec('sudo apt-get update');
+            exec('sudo apt-get install php7.3 php7.3-fpm phpcli phpmysql phpgd phpimagick phprecode phptidy phpxmlrpc');
         } else {
-            if (IO::confirm('PHP 7.3 (FPM) NOT installed, install?')) {
-                exec('sudo add-apt-repository ppa:ondrej/php');
-                exec('sudo apt-get update');
-                exec('sudo apt-get install php7.3 php7.3-fpm phpcli phpmysql phpgd phpimagick phprecode phptidy phpxmlrpc');
-            } else {
-                IO::abort();
-            }
+            IO::abort();
         }
     }
 
@@ -29,14 +29,14 @@ function install()
             exec('sudo add-apt-repository ppa:nginx/stable');
             exec('sudo apt-get update');
             exec('sudo apt-get install nginx');
+        }
+    } else {
+        if (IO::confirm('Nginx NOT installed, install?')) {
+            exec('sudo add-apt-repository ppa:nginx/stable');
+            exec('sudo apt-get update');
+            exec('sudo apt-get install nginx');
         } else {
-            if (IO::confirm('Nginx NOT installed, install?')) {
-                exec('sudo add-apt-repository ppa:nginx/stable');
-                exec('sudo apt-get update');
-                exec('sudo apt-get install nginx');
-            } else {
-                IO::abort();
-            }
+            IO::abort();
         }
     }
 
@@ -48,14 +48,13 @@ function install()
         }
     } else {
         if (IO::confirm('Composer NOT installed, install?')) {
-            $string = '
-                php -r "copy(\'https://getcomposer.org/installer\', \'composer-setup.php\');"
-                    php -r "if (hash_file(\'sha384\', \'composer-setup.php\') === \'a5c698ffe4b8e849a443b120cd5ba38043260d5c4023dbf93e1558871f1f07f58274fc6f4c93bcfd858c6bd0775cd8d1\') { echo \'Installer verified\'; } else { echo \'Installer corrupt\'; unlink(\'composer-setup.php\'); } echo PHP_EOL;"
-                    php composer-setup.php
-                php -r "unlink(\'composer-setup.php\');"
-            ';
+            $installer = file_get_contents('https://getcomposer.org/installer');
+	    file_put_contents('composer-install.php', $installer);
 
-            exec($string);
+	    exec('php composer-install.php');
+	    exec('sudo mv composer.phar /usr/local/bin/composer');
+
+	    IO::log('Composer installed');
         } else {
             IO::abort();
         }
@@ -80,5 +79,17 @@ function install()
         if (IO::confirm('Make "gerr" executable globally available?')) {
             exec('sudo ln -s '.__DIR__.'/gerr.php /usr/bin/gerr');
         }
+    }
+
+    if (`which certbot`) {
+	IO::log('Certbot OK');
+
+	if (IO::confirm('Update Certbot?')) {
+	    passthru('sudo apt-get update');
+	    passthru('sudo apt-get install --only-upgrade certbot');
+	}
+    } else {
+	passthru('bash '.__DIR__.'/bash/certbot.sh');
+	IO::log('Certbot installed');
     }
 }

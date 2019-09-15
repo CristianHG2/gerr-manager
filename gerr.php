@@ -9,13 +9,13 @@ require __DIR__.'/db.php';
 
 /* Initialize GERR */
 
-if ( count($argv) <= 2 ) {
+if ( count($argv) < 2 ) {
     return IO::usage();
 }
 
 /* Verify Setup */
 
-$config = file_get_contents('config.json');
+$config = file_get_contents(__DIR__.'/config.json');
 $config = json_decode($config);
 
 if (!is_object($config) || !isset($config->init)) {
@@ -28,12 +28,18 @@ if (!is_object($config) || !isset($config->init)) {
 
 	$config->init = true;
 
-	file_put_contents('config.json', json_encode($config));
+	file_put_contents(__DIR__.'/config.json', json_encode($config));
 }
 
 /* Naming */
 
 $command = $argv[1];
+
+if ($command === 'verify') {
+    install();
+    return;
+}
+
 $subcommand = $argv[2];
 
 /* Handler */
